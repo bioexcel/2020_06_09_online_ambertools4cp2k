@@ -3,17 +3,11 @@ title: Figures
 ---
 
 {% include base_path.html %}
-{% include manual_episode_order.html %}
 
 <script>
   window.onload = function() {
     var lesson_episodes = [
-    {% for lesson_episode in lesson_episodes %}
-      {% if site.episode_order %}
-        {% assign episode = site.episodes | where: "slug", lesson_episode | first %}
-      {% else %}
-        {% assign episode = lesson_episode %}
-      {% endif %}
+    {% for episode in site.episodes %}
     "{{ episode.url }}"{% unless forloop.last %},{% endunless %}
     {% endfor %}
     ];
@@ -64,15 +58,10 @@ title: Figures
     }
   }
 </script>
-
-{% comment %} Create anchor for each one of the episodes.  {% endcomment %}
-
-{% for lesson_episode in lesson_episodes %}
-  {% if site.episode_order %}
-    {% assign episode = site.episodes | where: "slug", lesson_episode | first %}
-  {% else %}
-    {% assign episode = lesson_episode %}
-  {% endif %}
+{% comment %}
+Create anchor for each one of the episodes.
+{% endcomment %}
+{% for episode in site.episodes %}
 <article id="{{ episode.url }}" class="figures"></article>
 {% endfor %}
 
