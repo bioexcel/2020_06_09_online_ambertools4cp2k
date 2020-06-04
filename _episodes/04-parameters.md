@@ -14,20 +14,20 @@ keypoints:
 - "ALWAYS check the parameters for your system and test that they behave as expected."
 ---
 
-In this tutorial, we will make use of the `antechamber` and `parmchk2` tools from AmberTools package to generate AMBER force field parameters. We will use the "**general AMBER force field 2 [(GAFF2)](http://ambermd.org/antechamber/gaff.html)**". This force field was designed to provide atom types and atom parameters needed to parameterise most pharmaceutical molecules, and is compatible with the traditional AMBER force fields. To assign partial charges, we are going to use **[AM1-BCC2 charge method](https://pubmed.ncbi.nlm.nih.gov/12395429/)**. It is an inexpensive and fast method for calculating partial charges and any limitations of this method would be fixed by the QM treatment of the ligand in the QM/MM simulation.  
+In this tutorial, we will make use of the `antechamber` and `parmchk2` tools from AmberTools package to generate AMBER force field parameters. We will use the "**general AMBER force field 2 [(GAFF2)](http://ambermd.org/antechamber/gaff.html)**" parameters. This force field was designed to provide atom types and atom parameters needed to parameterise most pharmaceutical molecules, and is compatible with the traditional AMBER force fields for proteins. To assign partial charges, we are going to use **[AM1-BCC2 charge method](https://pubmed.ncbi.nlm.nih.gov/12395429/)**. It is an inexpensive and fast method for calculating partial charges and be we don't need to worry too much about its limitations as partial charges won't be used during production runs due to the QM treatment of the ligand in the QM/MM simulation.  
 
 ***
 
 ## Generating point charges and assigning atomtypes with `antechamber`
 
-`antechamber` allows the rapid generation of topology files for use with the AMBER simulation programs. It runs a series of other AmberTools programs (`sqm`, `divcon`, `atomtype`, `am1bcc`, `bondtype`, `espgen`, `respgen` and `prepgen`) to be able to:
+`antechamber` allows the rapid generation of topology files for use with the AMBER simulation programs. It is a higher-level wrapper around other AmberTools programs (`sqm`, `divcon`, `atomtype`, `am1bcc`, `bondtype`, `espgen`, `respgen` and `prepgen`) and is able to:
 
 - Automatically identify bond and atom types
 - Judge atomic equivalence
 - Generate residue topology files
 - Find missing force field parameters and supply reasonable suggestions
 
-We will use `antechamber` to assign atom types to the GWS ligand and calculate a set of point charges. We will have to specify GAFF2 force field (`-at gaff2`, more information on the parameters here: `$AMBERHOME/dat/leap/parm/gaff.dat`), the [AM1-BCC2](https://pubmed.ncbi.nlm.nih.gov/12395429/) charge method (`-c bcc`), the net charge of the molecule (`-nc 0`) and the name of the new residue generated (We are going to keep GWS: `-rn GWS`). We are going to output a mol2-type file (`-fo mol2`) containing the atomtypes and the point charges.  
+We will use `antechamber` to assign atom types to the GWS ligand and calculate a set of point charges. We will have to specify GAFF2 force field (`-at gaff2`, more information on the parameters here: `$AMBERHOME/dat/leap/parm/gaff2.dat`), the [AM1-BCC2](https://pubmed.ncbi.nlm.nih.gov/12395429/) charge method (`-c bcc`), the net charge of the molecule (`-nc 0`) and the name of the new residue generated (We are going to keep GWS: `-rn GWS`). We are going to output a mol2-type file (`-fo mol2`) containing the atomtypes and the point charges.  
 
 ~~~
 antechamber -i GWS.H.pdb -fi pdb -o GWS.mol2 -fo mol2 -c bcc -nc 0 -rn GWS -at gaff2
@@ -60,10 +60,10 @@ Running: /home/d118/d118/shared/amber20/bin/sqm -O -i sqm.in -o sqm.out
 ~~~
 {: .output}
 
-This step generates a lot of intermediate files (in capital letters). You can safely delete them as these are used in antechamber and we no longer require them.The sqm.xxx files are input and output from the sqm quantum mechanics code used by Antechamber to calculate the atomic point charges. We are not interested in the data here except to check that the sqm calculation completed successfully.
+This step generates a lot of intermediate files (in capital letters). You can safely delete them as these are used in antechamber and we no longer require them. The `sqm.xxx` files are input and output from the `sqm` quantum mechanics code used by `antechamber` to calculate the atomic point charges. We are not interested in the data here except to check that the sqm calculation completed successfully.
 
 ~~~
-tail sqm.out
+tail  sqm.out
 ~~~
 {: .language-bash}
 
@@ -99,16 +99,16 @@ bcc
 
 ## Looking for missing force field parameters with `parmchk2`
 
-While the most likely combinations of bond, angle and dihedral parameters are defined in the parameter file it is possible that our molecule might contain combinations of atom types for bonds, angles or dihedrals that have not been parameterised. If this is the case, we will have to specify any missing parameters before we can create our prmtop and inpcrd files in Leap. 
+While the most likely combinations of bond, angle and dihedral parameters are defined in the parameter file it is possible that our molecule might contain combinations of atom types for bonds, angles or dihedrals that have not been parameterised. If this is the case, we will have to specify any missing parameters before we can create our prmtop and inpcrd files in LEap. 
 
-We will use ```parmchk2``` to test if all the parameters we require are available.
+We will use `parmchk2` to test if all the parameters we require are available.
 
 ~~~
 parmchk2 -i GWS.mol2 -f mol2 -o GWS.frcmod -s gaff2
 ~~~
 {: .language-bash}
 
-```parmchk2``` generates a parameter file that can be loaded into Leap in order to add missing parameters. It contains all of the missing parameters. If possible, it will fill in these missing parameters by analogy to a similar parameter. Let's look at the generated GWS.frcmod file: 
+`parmchk2` generates a parameter file that can be loaded into Leap in order to add missing parameters. It contains all of the missing parameters. If possible, it will fill in these missing parameters by analogy to a similar parameter. Let's look at the generated GWS.frcmod file: 
 
 ~~~
 Remark line goes here

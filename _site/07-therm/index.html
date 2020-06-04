@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-06-03 16:20:02 +0100">
+    <meta http-equiv="last-modified" content="2020-06-04 13:07:49 +0100">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -146,11 +146,19 @@
             
             <li><a href="../about/index.html">About</a></li>
             
+            <li><a href="../customization/index.html">Customizing Your Workshop's Website</a></li>
+            
+            <li><a href="../design/">Background and Design</a></li>
+            
             <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../faq/index.html">FAQ</a></li>
             
             <li><a href="../figures/index.html">Figures</a></li>
             
             <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+            <li><a href="../helpers/index.html">Information for Helpers</a></li>
             
             <li><a href="../inputs/index.html">Input files</a></li>
             
@@ -262,7 +270,7 @@
 
 </blockquote>
 
-<p>After the minimisation step, we will heat the system up to the target temperature 298K (25°C, default room temperature for experimental work) while keeping the volume constant. Afterwards, we will allow the volume to fluctuate and equilibrate the density of the system at a contant pressure of 1 atm (default value for experimental work) while still keeping the temperature at 298K.</p>
+<p>After the minimisation step, we will heat the system up to the target temperature 298K (25°C, standard value for room temperature experiments) while keeping the volume constant. Afterwards, we will allow the volume to fluctuate and equilibrate the density of the system at a contant pressure of 1 atm (standard value) while still keeping the temperature at 298K.</p>
 
 <h2 id="thermalisation">Thermalisation</h2>
 
@@ -272,7 +280,7 @@
  &amp;cntrl
   imin=0,                   ! Run molecular dynamics.
   ntx=1,                    ! Initial file contains coordinates, but no velocities.
-  irest=0,                  ! Do not restart the simulation
+  irest=0,                  ! Do not restart the simulation, (only read coordinates from the coordinates file)
   nstlim=15000,             ! Number of MD-steps to be performed.
   dt=0.002,                 ! Time step (ps)
   ntf=2, ntc=2,             ! Constrain lengths of bonds having hydrogen atoms (SHAKE)
@@ -292,7 +300,7 @@
 
 <p><code class="language-plaintext highlighter-rouge">sander</code> produces several output files:</p>
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">heat_classical.out</code>: Output with system values stored during the run.</li>
+  <li><code class="language-plaintext highlighter-rouge">heat_classical.out</code>: Log file with system values stored during the run.</li>
   <li><code class="language-plaintext highlighter-rouge">system.heat.rst7</code>: coordinates and velocities to restart the simulation.</li>
   <li><code class="language-plaintext highlighter-rouge">system.heat.nc</code>: trajectory in netcdf format of the simulation.</li>
 </ul>
@@ -309,14 +317,14 @@
 
 <h2 id="pressure-equilibration">Pressure equilibration</h2>
 
-<p>Once the thermalisation step has finished, <code class="language-plaintext highlighter-rouge">sander</code> will use the input file <code class="language-plaintext highlighter-rouge">sander_equil.in</code> to equilibrate the density of the system. Usually both equilibrations steps should be longer (simulation time) but for the sake of time, we will use the same simulation length (30ps):</p>
+<p>Once the thermalisation step has finished, <code class="language-plaintext highlighter-rouge">sander</code> will use the input file <code class="language-plaintext highlighter-rouge">sander_equil.in</code> to equilibrate the density of the system. It is advised to heat and equilibrate over longer periods of simulations than the ones used in this workshop. However for the sake of time, we will use the same simulation length (30ps):</p>
 
 <div class="language-plaintext source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Density equilibration
 &amp;cntrl
   imin= 0,                       ! Run molecular dynamics.
   nstlim=15000,                  ! Number of MD-steps to be performed.
   dt=0.002,                      ! Time step (ps)
-  irest=1,                       ! Restart the simulation
+  irest=1,                       ! Restart the simulation and read coordinates and velocities from the restart file provided in -c
   ntx=5,                         ! Initial file contains coordinates and velocities.
   ntpr=500, ntwx=500, ntwr=500,  ! Output options
   cut=8.0,                       ! non-bond cut off
@@ -331,7 +339,7 @@
 
 <p>Again, <code class="language-plaintext highlighter-rouge">sander</code> produces several output files:</p>
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">equil_classical.out</code>: Output with thermodynamic data of the system stored during the run.</li>
+  <li><code class="language-plaintext highlighter-rouge">equil_classical.out</code>: Log file with thermodynamic data of the system stored during the run.</li>
   <li><code class="language-plaintext highlighter-rouge">system.equil.rst7</code>: coordinates and velocities to restart the simulation.</li>
   <li><code class="language-plaintext highlighter-rouge">system.equil.nc</code>: trajectory in netcdf format of the simulation.</li>
 </ul>
@@ -351,7 +359,7 @@
 
 <h2 id="analysis-of-the-mm-equilibration-simulation">Analysis of the MM equilibration simulation</h2>
 
-<p>If we have a closer look at the final steps highlighted before. In the .out files, we have printed the system values every 500 steps, these system values include important values such as:</p>
+<p>We will now have a closer look at the final steps highlighted before. In the log files, we have monitored the values of several quantities. Especially relevant are:</p>
 <ul>
   <li><code class="language-plaintext highlighter-rouge">NSTEP</code>: The time step that the MD simulation is at</li>
   <li><code class="language-plaintext highlighter-rouge">TIME</code>: The total time of the simulation (including restarts)</li>
@@ -382,7 +390,7 @@ Outputing summary.DENSITY
 Outputing summary.VOLUME
 </code></pre></div></div>
 
-<p>Here we will show you the expected output of an equilibration run. The energy of the system will depend on the temperature of the system. Here you can compare side by side the time evolution of the temperature, the total energy, the kinetic energy and the potential energy.</p>
+<p>Here we will show you the expected output of an equilibration run. First, we will show the temperature and the energies (kinetic, potential and total) of the system.</p>
 
 <table>
   <thead>
@@ -424,9 +432,9 @@ Outputing summary.VOLUME
   </tbody>
 </table>
 
-<p>You can see that the system reaches a plateau on each one of this values. We want to highlight that the MM equilibration in this tutorial is too short (only 60ps) and we suggest you to run a longer equilibration steps in your simulations.</p>
+<p>You can see that the system starts to reach a plateau on each one of these values. We want to reiterate that the MM equilibration in this tutorial is way too short (only 60ps) and we suggest you to run a longer equilibration steps in your simulations.</p>
 
-<p>It is not within the scope of this tutorial to analyse these equilibration runs, therefore we leave that to you. However we provide a jupyter notebook with the code to produce these graphs for your systems.</p>
+<p>It is not within the scope of this tutorial to fully analyse these equilibration runs, therefore we leave that to you. However, we provide a jupyter notebook with the code to produce these graphs for your systems.</p>
 
 
 <blockquote class="keypoints">
@@ -440,9 +448,6 @@ Outputing summary.VOLUME
 </li>
     
     <li><p>Density equilibration fixes the water density and corrects the size simulation box. It prevents air bubbles in our system that might cause simulation artefacts.</p>
-</li>
-    
-    <li><p>You should <strong>ALWAYS</strong> equilibrate your system using <code class="language-plaintext highlighter-rouge">sander</code>.”</p>
 </li>
     
   </ul>

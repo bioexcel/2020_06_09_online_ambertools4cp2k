@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-06-03 16:20:02 +0100">
+    <meta http-equiv="last-modified" content="2020-06-04 13:07:49 +0100">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -146,11 +146,19 @@
             
             <li><a href="../about/index.html">About</a></li>
             
+            <li><a href="../customization/index.html">Customizing Your Workshop's Website</a></li>
+            
+            <li><a href="../design/">Background and Design</a></li>
+            
             <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../faq/index.html">FAQ</a></li>
             
             <li><a href="../figures/index.html">Figures</a></li>
             
             <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+            <li><a href="../helpers/index.html">Information for Helpers</a></li>
             
             <li><a href="../inputs/index.html">Input files</a></li>
             
@@ -259,9 +267,9 @@
 
 </blockquote>
 
-<p>Once we have parameters for our ligand and prepared a protein PDB file, we can start building our system and creating topology and coordinate files for AMBER. To create the mentioned files we will use <code class="language-plaintext highlighter-rouge">LEaP</code>. there are two versions of leap: the GUI version <code class="language-plaintext highlighter-rouge">xLEaP</code> and the terminal version <code class="language-plaintext highlighter-rouge">tLEaP</code>. <code class="language-plaintext highlighter-rouge">xLEaP</code> is better to learn Leap because you can visualise the result of each command you try. However, <code class="language-plaintext highlighter-rouge">xLEaP</code> is quite buggy and it can be frustrating before you get used to all its quirks.</p>
+<p>Once we have parameters for our ligand and have prepared a protein PDB file, we can start building our system and creating topology and coordinate files for AMBER. To create the mentioned files we will use <code class="language-plaintext highlighter-rouge">LEaP</code>. there are two versions of leap: the GUI version <code class="language-plaintext highlighter-rouge">xLEaP</code> and the terminal version <code class="language-plaintext highlighter-rouge">tLEaP</code>. <code class="language-plaintext highlighter-rouge">xLEaP</code> is better to learn Leap because you can visualise the result of each command you try. However, <code class="language-plaintext highlighter-rouge">xLEaP</code> is quite buggy and it can be frustrating before you get used to all its quirks.</p>
 
-<p>In this session, we are going to use <code class="language-plaintext highlighter-rouge">tleap</code> and I am going to walk you through every command we use. If you type tleap you should enter in the tLEaP command-line. If you want to check what you did in previous session of LEaP, LEaP is quite verbose and informs you of everything it does as well as writing it into the <strong>leap.log</strong> file.</p>
+<p>In this session, we are going to use <code class="language-plaintext highlighter-rouge">tleap</code> and I am going to walk you through every command we use. If you type <code class="language-plaintext highlighter-rouge">tleap</code> in your terminal you should enter in the <code class="language-plaintext highlighter-rouge">tLEaP</code> command-line. If you want to check what you did in previous session of LEaP, LEaP is quite verbose and informs you of everything it does as well as writing it into the <strong>leap.log</strong> file.</p>
 
 <p>We have prepared a LEaP script to set up our system, which we are going to explain briefly before executing it.</p>
 
@@ -269,7 +277,7 @@
 
 <h2 id="build-your-system-with-tleap">Build your system with <code class="language-plaintext highlighter-rouge">tLEap</code></h2>
 
-<p>We are going to use default force fields (amberff14SB, tip3p and GAFF2) in this tutorial, so we can use the leaprc scripts already included in AMBER:</p>
+<p>We are going to use default force fields (amberff14SB, tip3p and GAFF2) in this tutorial, so we can use the leaprc scripts already included in AMBER to load them into <code class="language-plaintext highlighter-rouge">tleap</code>:</p>
 <ul>
   <li><code class="language-plaintext highlighter-rouge">leaprc.protein.ff14SB</code> for the protein</li>
   <li><code class="language-plaintext highlighter-rouge">leaprc.gaff2</code> for the ligand molecule</li>
@@ -282,7 +290,7 @@ source leaprc.gaff2
 source leaprc.water.tip3p
 </code></pre></div></div>
 
-<p>Now we have to load our three units (protein, ligand and water molecules) into <code class="language-plaintext highlighter-rouge">tLeap</code>. We are going to start with the ligand by lading the two files we have created before: <strong>GWS.frcmod</strong> and <strong>GWS.mol2</strong> (mol2 file already includes the coordinates of the ligand). After, we load the coordinates for the protein and the water molecules with the <code class="language-plaintext highlighter-rouge">loadPDB</code> command.</p>
+<p>Now we have to load our three units (protein, ligand and water molecules) into <code class="language-plaintext highlighter-rouge">tLeap</code>. We are going to start with the ligand by lading the two files we have created before: <strong>GWS.frcmod</strong> and <strong>GWS.mol2</strong> (In this case the mol2 file already includes the correct coordinates of the ligand). After, we load the coordinates for the protein and the water molecules with the <code class="language-plaintext highlighter-rouge">loadPB</code> command.</p>
 
 <div class="language-plaintext source highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Load extraparameters for the ligand
 loadamberparams GWS.frcmod
@@ -310,7 +318,7 @@ check system
 
 <p>If the unit is OK, we can continue! Now we need to solvate it and add counterions to neutralise the system.</p>
 
-<p>To solvate the system, we can use 2 different commands: <code class="language-plaintext highlighter-rouge">solvateOct</code> and <code class="language-plaintext highlighter-rouge">solvateBox</code>. These commands differ in the shape of the resulting simulation box: the first command creates an octaedric solvation box and the second a cubic solvation box. Despite octaedric boxes being smaller and compatible with globular proteins, we are going to use <code class="language-plaintext highlighter-rouge">solvateBox</code> because CP2K only allows orthorombic boxes.</p>
+<p>To solvate the system, we can use 2 different commands: <code class="language-plaintext highlighter-rouge">solvateOct</code> and <code class="language-plaintext highlighter-rouge">solvateBox</code>. These commands differ in the shape of the resulting simulation box: the first command creates a truncated octaedron solvation box and the second a cubic solvation box. Despite truncated octaedric boxes being smaller and compatible with globular proteins, we are going to use <code class="language-plaintext highlighter-rouge">solvateBox</code> because CP2K only allows orthorombic boxes.</p>
 
 <p>Last but not least, we need to neutralise the system by adding counterions. To this end, we will add Na+ and Cl- ions until our box reaches the correct charge. This is done with the <code class="language-plaintext highlighter-rouge">addions2</code> command.</p>
 
@@ -322,7 +330,8 @@ addions2 system Cl- 0
 addions2 system Na+ 0
 </code></pre></div></div>
 
-<p>Now we can proceed to save our topology and coordinate files with <code class="language-plaintext highlighter-rouge">saveamberparm system system.parm7 system.rst7</code>. Before doing anything else, LEaP checks that the unit it is OK and then proceeds to build the topology and write the coordinates. Finally it prints a summary of the ends of the system molecules. We have a SER in the N terminal end and THR on the C terminal end of the protein, a ligand named GWS and 32593 water molecules.</p>
+<p>Now we can proceed to save our topology and coordinate files with <code class="language-plaintext highlighter-rouge">saveamberparm system system.parm7 system.rst7</code>. Before doing anything else, LEaP checks that the unit it is OK and then proceeds to build the topology and write the coordinates. Finally, it prints a summary of the system molecules. We have a ligand named GWS and 13121 water molecules. 
+It is important that you include the saveAmberParm command line, otherwise the information we have loaded will be lost once we exit <code class="language-plaintext highlighter-rouge">LEap</code>.</p>
 
 <div class="language-plaintext source highlighter-rouge"><div class="highlight"><pre class="highlight"><code># Save AMBER input files
 savePDB system system.pdb

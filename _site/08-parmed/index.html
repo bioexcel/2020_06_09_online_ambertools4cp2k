@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-06-03 16:20:02 +0100">
+    <meta http-equiv="last-modified" content="2020-06-04 13:07:49 +0100">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -146,11 +146,19 @@
             
             <li><a href="../about/index.html">About</a></li>
             
+            <li><a href="../customization/index.html">Customizing Your Workshop's Website</a></li>
+            
+            <li><a href="../design/">Background and Design</a></li>
+            
             <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../faq/index.html">FAQ</a></li>
             
             <li><a href="../figures/index.html">Figures</a></li>
             
             <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+            <li><a href="../helpers/index.html">Information for Helpers</a></li>
             
             <li><a href="../inputs/index.html">Input files</a></li>
             
@@ -270,9 +278,9 @@
 
 <h2 id="adding-lennard-jones-parameters-using-parmed">Adding Lennard-Jones parameters using <code class="language-plaintext highlighter-rouge">parmed</code></h2>
 
-<p>Before running any QM/MM simulation, we need to amend the Amber forcefield to give hydrogen atoms in the forcefield do Lennard-Jones parameters. In particular, we are going to add the values of the hydrogen atom that correspond to the hydroxyl in the GAFF forcefield to TIP3P water model and to the hydroxyl groups from serine and tyrosine residues.</p>
+<p>By construction, some hydrogen atoms do not have Lennard-Jones parameters in the AMBER forcefields. However, before running any QM/MM simulation, we need to provide those parameters. In particular, we are going to add the values of the hydrogen atom that correspond to the hydroxyl in the GAFF forcefield to TIP3P water model and to the hydroxyl groups from serine and tyrosine residues.</p>
 
-<p>To do that, we use the <code class="language-plaintext highlighter-rouge">parmed</code> tool of the AmberTools package. First, we load the topology file in <code class="language-plaintext highlighter-rouge">parmed</code> and then we do have a lot of options to modify it (More information <a href="http://parmed.github.io/ParmEd/html/index.html">here</a>).</p>
+<p>To do that, we will use the <code class="language-plaintext highlighter-rouge">parmed</code> tool of the AmberTools package. The usage of this program is similar to LEap. First, we load the topology file in <code class="language-plaintext highlighter-rouge">parmed</code> and then we do have a lot of options to modify it (More information <a href="http://parmed.github.io/ParmEd/html/index.html">here</a>).</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>parmed system.parm7 
 </code></pre></div></div>
@@ -312,7 +320,7 @@ quit
 <blockquote class="callout">
   <h2 id="tip">TIP</h2>
 
-  <p>You can also run <code class="language-plaintext highlighter-rouge">parmed</code> with an parmed.in input file.</p>
+  <p>You can also run <code class="language-plaintext highlighter-rouge">parmed</code> with an parmed.in input file similarly as we did with <code class="language-plaintext highlighter-rouge">tleap</code>.</p>
   <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>parmed system.parm7 <span class="nt">-i</span> parmed.in 
 </code></pre></div>  </div>
 
@@ -321,16 +329,16 @@ quit
 
 <h2 id="centering-the-solutes-in-the-simulation-box">Centering the solutes in the simulation box</h2>
 
-<p>Last but not least, we need to recenter the protein to the center of the simulation box using <code class="language-plaintext highlighter-rouge">cpptraj</code>. <code class="language-plaintext highlighter-rouge">cpptraj</code> is the trajectory analysis tool of Amber package and it can do a lot of different analysis (you can find more information <a href="https://amber-md.github.io/cpptraj/CPPTRAJ.xhtml">here</a>). In this tutorial, we are only going to use it to recenter the system and make sure the coordinate file is in the correct format.</p>
+<p>Last but not least, we need to recenter the protein to the center of the simulation box using <code class="language-plaintext highlighter-rouge">cpptraj</code>. <code class="language-plaintext highlighter-rouge">cpptraj</code> is the trajectory analysis tool of the AmberTools package and it can do a lot of different analysis (you can find more information <a href="https://amber-md.github.io/cpptraj/CPPTRAJ.xhtml">here</a>). In this tutorial, we are only going to use it to recenter the system and make sure the coordinate file is in the correct format.</p>
 
 <p>First, we need to load the topology file:</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cpptraj <span class="nt">-p</span> system_LJ_mod.parm7
 </code></pre></div></div>
 
-<p>Then, we feed cpptraj three different commands:</p>
+<p>Then, we provide <code class="language-plaintext highlighter-rouge">cpptraj</code> three different commands:</p>
 <ul>
-  <li><code class="language-plaintext highlighter-rouge">trajin</code>: input trajectories</li>
+  <li><code class="language-plaintext highlighter-rouge">trajin</code>: input trajectories. It can be repeated as many times as trajectory file you want to analyse.</li>
   <li><code class="language-plaintext highlighter-rouge">trajout</code>: output trajectories specifying the desired format.</li>
   <li><code class="language-plaintext highlighter-rouge">autoimage</code>: recenters protein coordinates and fixes the simulation box around it.</li>
 </ul>

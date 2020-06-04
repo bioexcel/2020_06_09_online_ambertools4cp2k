@@ -3,6 +3,7 @@ title: QM/MM monitorisation runs
 teaching: 25
 exercises: 0
 questions:
+- "What is CP2K?"
 - "What is the first step of a QM/MM simulation?"
 objectives:
 - "Choose the QM region effectively"
@@ -14,9 +15,29 @@ keypoints:
 - "Instabilities between the QM and the MM regions are likely to show up in this monitorisation run."
 ---
 
-After we have equilibrated the system using molecular mechanics, we need to equilibrate the system running the chosen QM/MM approach. It is important to run a monitorisation run before any production run to make sure our system behaves as expected.  
+## Moving from MM to QM/MM...
 
-We will use a semi-empirical [PM3](https://en.wikipedia.org/wiki/PM3_(chemistry)) to define the QM region and the amended Amber forcefield to define the MM subsystem. We will run 500fs (1000steps * 0.5 fs) of simulation on an ARCHER node. 
+We want to address a few points before we start running a QM/MM simulation.
+
+#### What is CP2K?
+
+[CP2K](https://www.cp2k.org) is a quantum chemistry and solid state physics software package that can perform atomistic simulations of solid state, liquid, molecular, periodic, material, crystal, and biological systems. CP2K provides a general framework for different modeling methods such as DFT using the mixed Gaussian and plane waves approaches GPW and GAPW. Supported theory levels include DFTB, LDA, GGA, MP2, RPA, semi-empirical methods (AM1, PM3, PM6, RM1, MNDO, …), and classical force fields (AMBER, CHARMM, …). CP2K can do simulations of molecular dynamics, metadynamics, Monte Carlo, Ehrenfest dynamics, vibrational analysis, core level spectroscopy, energy minimization, and transition state optimization using NEB or dimer method.
+
+You can find more information on its usage [here](https://manual.cp2k.org/). 
+
+#### Which theory level are we going to use?
+
+We will use of [PM3](https://en.wikipedia.org/wiki/PM3_(chemistry)), a semiempirical method, to define the QM region and the amended Amber forcefield to define the MM subsystem. We will run 500fs (1000steps * 0.5 fs) of simulation on an ARCHER node. 
+
+#### How do we define the QM region?
+
+In this example, we are going to define the ligand GWS as the QM region. This implies 34 QM atoms embedded within a MM envinronment. Despite this is a simple and convenient example, it is not uncommon. It also has the advantage that we do not need to split any covalent bonds between the QM subsystem and the MM subsystem. This topic will be covered in future sessions. 
+
+***
+
+## Running a QM/MM monitorisation run
+
+After we have equilibrated the system using molecular mechanics, we need to equilibrate the system running the chosen QM/MM approach. It is important to run a monitorisation run before any production run to make sure our system behaves as expected.  
 
 This step might take some time, so we will also submit the calculation to the ARCHER short queue:
 
@@ -406,3 +427,13 @@ If we open the `cp2k_qmmm_equil.out`, the output format for each step of the QM/
  *******************************************************************************
 ~~~
 {: .output}
+
+
+> ## Further information:
+> 
+> CP2K uses different unit from AmberTools and it can be confusing sometimes. Such as:
+> * Bohrs for Length.
+>
+> Here is a list of [available unit in CP2K](https://manual.cp2k.org/trunk/units.html).  
+>
+{: .challenge}

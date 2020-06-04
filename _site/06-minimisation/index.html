@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-06-03 16:20:02 +0100">
+    <meta http-equiv="last-modified" content="2020-06-04 13:07:49 +0100">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -146,11 +146,19 @@
             
             <li><a href="../about/index.html">About</a></li>
             
+            <li><a href="../customization/index.html">Customizing Your Workshop's Website</a></li>
+            
+            <li><a href="../design/">Background and Design</a></li>
+            
             <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../faq/index.html">FAQ</a></li>
             
             <li><a href="../figures/index.html">Figures</a></li>
             
             <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+            <li><a href="../helpers/index.html">Information for Helpers</a></li>
             
             <li><a href="../inputs/index.html">Input files</a></li>
             
@@ -270,9 +278,9 @@
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>qsub send_mm_equil.pbs
 </code></pre></div></div>
 
-<p>We are going to minimise and equilibrate the system using <code class="language-plaintext highlighter-rouge">sander</code> tool from AmberTools suite. We have provided commented input files and ARCHER submission scripts to make these steps easier to follow. You can find more information on the sander input options in <a href="https://ambermd.org/doc12/Amber20.pdf">Chapter 19</a> of the Amber20 manual.</p>
+<p>We are going to minimise and equilibrate the system using the <code class="language-plaintext highlighter-rouge">sander</code> tool from AmberTools suite. We have provided commented input files and ARCHER submission scripts to make these steps easier to follow. You can find more information on the sander input options in <a href="https://ambermd.org/doc12/Amber20.pdf">Chapter 19</a> of the Amber20 manual.</p>
 
-<p><code class="language-plaintext highlighter-rouge">sander</code> needs the initial coordinates (<code class="language-plaintext highlighter-rouge">-c system.rst7</code>), topology (<code class="language-plaintext highlighter-rouge">-p system.parm7</code>) and input file (<code class="language-plaintext highlighter-rouge">-i sander_min.in</code>). Also, we can specify the name of output files such as output file (<code class="language-plaintext highlighter-rouge">-o</code>``) and final coordinates (<code class="language-plaintext highlighter-rouge">-r</code>).</p>
+<p>To run <code class="language-plaintext highlighter-rouge">sander</code>, one needs to specify at least the initial coordinates (<code class="language-plaintext highlighter-rouge">-c system.rst7</code>) and the topology files of your system (<code class="language-plaintext highlighter-rouge">-p system.parm7</code>) and an input file (<code class="language-plaintext highlighter-rouge">-i sander_min.in</code>) providing the details of the simuilation to perform. Also, we can specify the name of output files such the log file (<code class="language-plaintext highlighter-rouge">-o</code>) and final coordinates (<code class="language-plaintext highlighter-rouge">-r</code>).</p>
 
 <div class="language-plaintext source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#!/bin/bash --login
 #PBS -N MM_equil
@@ -285,6 +293,7 @@
 # Make sure you change this to your budget code
 #PBS -A d118
 
+module swap PrgEnv-cray PrgEnv-gnu
 module load amber-tools/20
 
 # Move to directory that script was submitted from
@@ -307,7 +316,7 @@ date
 
 <h2 id="energy-minimisation-with-sander">Energy minimisation with <code class="language-plaintext highlighter-rouge">sander</code></h2>
 
-<p>The minimisation protocol will include 4000 steps using two different methods: 2000 of <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> and 2000 of <a href="https://en.wikipedia.org/wiki/Conjugate_gradient_method">conjugate gradient</a>. The sander input file looks like this:</p>
+<p>We have devised a minimisation protocol that will perform 4000 steps using two different methods: 2000 of <a href="https://en.wikipedia.org/wiki/Gradient_descent">gradient descent</a> and 2000 of <a href="https://en.wikipedia.org/wiki/Conjugate_gradient_method">conjugate gradient</a>. The sander input file looks like this:</p>
 
 <div class="language-plaintext source highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Minimisation of system 
  &amp;cntrl
@@ -333,22 +342,21 @@ date
  1-4 VDW =      587.3195  1-4 EEL =     8150.8146  RESTRAINT  =        0.0000
 </code></pre></div></div>
 
+<p>We want the system to relax, so the <code class="language-plaintext highlighter-rouge">ENERGY</code> will decrease along the energy minimisation but we should also take the <code class="language-plaintext highlighter-rouge">GMAX</code> value into account. The <code class="language-plaintext highlighter-rouge">GMAX</code> is the slope on the Potential Energy Surface (PES) of the system of the current coordinates. <code class="language-plaintext highlighter-rouge">GMAX</code> should be close to 0. Other important information is the <code class="language-plaintext highlighter-rouge">NAME</code> and <code class="language-plaintext highlighter-rouge">NUMBER</code>, they point to the atom name and index, that is causing the major energy contribution.</p>
+
 
 
 <blockquote class="keypoints">
   <h2>Key Points</h2>
   <ul>
     
-    <li><p>After adding water molecules and combining coordinates of different system elements we have to relax the system to fix any bad contacts (LEap had warned us already of some bad contacts in the structure).</p>
+    <li><p>After adding water molecules and combining coordinates of different system elements we have to minimise the system to fix any bad contacts (LEap had warned us already of some bad contacts in the structure).</p>
 </li>
     
-    <li><p>Removing bad contacts at this point will prevent our system from blowing up later on.</p>
+    <li><p>Removing bad contacts at this point will prevent our system from failing catastrophically later down the line.</p>
 </li>
     
-    <li><p>Combining different minimisation methods is a good practice to avoid getting stuck into a local minima.</p>
-</li>
-    
-    <li><p>The <code class="language-plaintext highlighter-rouge">GMAX</code> value let us know which position we are sampling in the potential energy surface.</p>
+    <li><p>Combining different minimisation methods is a good practice and can help to avoid getting stuck into a local minima.</p>
 </li>
     
   </ul>

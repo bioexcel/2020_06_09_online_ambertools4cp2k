@@ -20,9 +20,9 @@ keypoints:
 
 ## Adding Lennard-Jones parameters using `parmed`
 
-Before running any QM/MM simulation, we need to amend the Amber forcefield to give hydrogen atoms in the forcefield do Lennard-Jones parameters. In particular, we are going to add the values of the hydrogen atom that correspond to the hydroxyl in the GAFF forcefield to TIP3P water model and to the hydroxyl groups from serine and tyrosine residues. 
+By construction, some hydrogen atoms do not have Lennard-Jones parameters in the AMBER forcefields. However, before running any QM/MM simulation, we need to provide those parameters. In particular, we are going to add the values of the hydrogen atom that correspond to the hydroxyl in the GAFF forcefield to TIP3P water model and to the hydroxyl groups from serine and tyrosine residues. 
 
-To do that, we use the `parmed` tool of the AmberTools package. First, we load the topology file in `parmed` and then we do have a lot of options to modify it (More information [here](http://parmed.github.io/ParmEd/html/index.html)).
+To do that, we will use the `parmed` tool of the AmberTools package. The usage of this program is similar to LEap. First, we load the topology file in `parmed` and then we do have a lot of options to modify it (More information [here](http://parmed.github.io/ParmEd/html/index.html)).
 
 ~~~
 parmed system.parm7 
@@ -74,7 +74,7 @@ quit
 
 >## TIP 
 >
->You can also run `parmed` with an parmed.in input file.
+>You can also run `parmed` with an parmed.in input file similarly as we did with `tleap`.
 >~~~
 >parmed system.parm7 -i parmed.in 
 >~~~
@@ -85,7 +85,7 @@ quit
 
 ## Centering the solutes in the simulation box
 
-Last but not least, we need to recenter the protein to the center of the simulation box using `cpptraj`. `cpptraj` is the trajectory analysis tool of Amber package and it can do a lot of different analysis (you can find more information [here](https://amber-md.github.io/cpptraj/CPPTRAJ.xhtml)). In this tutorial, we are only going to use it to recenter the system and make sure the coordinate file is in the correct format.
+Last but not least, we need to recenter the protein to the center of the simulation box using `cpptraj`. `cpptraj` is the trajectory analysis tool of the AmberTools package and it can do a lot of different analysis (you can find more information [here](https://amber-md.github.io/cpptraj/CPPTRAJ.xhtml)). In this tutorial, we are only going to use it to recenter the system and make sure the coordinate file is in the correct format.
 
 First, we need to load the topology file:
 
@@ -94,8 +94,8 @@ cpptraj -p system_LJ_mod.parm7
 ~~~
 {: .language-bash}
 
-Then, we feed cpptraj three different commands: 
-- `trajin`: input trajectories
+Then, we provide `cpptraj` three different commands: 
+- `trajin`: input trajectories. It can be repeated as many times as trajectory file you want to analyse. 
 - `trajout`: output trajectories specifying the desired format.
 - `autoimage`: recenters protein coordinates and fixes the simulation box around it. 
 

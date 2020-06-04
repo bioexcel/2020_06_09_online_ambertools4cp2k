@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-06-03 16:20:02 +0100">
+    <meta http-equiv="last-modified" content="2020-06-04 13:07:49 +0100">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -146,11 +146,19 @@
             
             <li><a href="../about/index.html">About</a></li>
             
+            <li><a href="../customization/index.html">Customizing Your Workshop's Website</a></li>
+            
+            <li><a href="../design/">Background and Design</a></li>
+            
             <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../faq/index.html">FAQ</a></li>
             
             <li><a href="../figures/index.html">Figures</a></li>
             
             <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+            <li><a href="../helpers/index.html">Information for Helpers</a></li>
             
             <li><a href="../inputs/index.html">Input files</a></li>
             
@@ -293,9 +301,10 @@
 
 <p>First, to set up the proper environment you should run the following commands on ARCHER. These set of commands will give you access to the installed software:</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module load amber-tools/20 
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>module swap PrgEnv-cray PrgEnv-gnu
+module load amber-tools/20 
 module load propka
-module load openbabel
+module load openbabel/2.4.1
 </code></pre></div></div>
 
 <p>Then we should move to out <code class="language-plaintext highlighter-rouge">work</code> folder. You should substitute XXX for the project name and YYY for your username:</p>

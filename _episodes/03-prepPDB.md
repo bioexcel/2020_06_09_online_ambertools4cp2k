@@ -75,7 +75,7 @@ propka31 protein.pdb
 
 PROPKA returns the calculated pKa values for tritable residues in the protein. These are aminacids, whose sidechain contains a chemical moiety that can change its protonation state depending on the pH of the environment they are found in. You have acidic residues (typically ASP and GLU, but in extreme environments TYR, SER and CYS can act as acids) and basic residues (LYS, ARG and HIS) You can find more information about these residues, and how its pKa depends on the chemical environment [here]().
 
-When preparing a protein, we have to compare each one of the predicted  pKa values with the chosen pH: if the pKa is below the chosen pH the residue should be deprotonated (that is acidic residues will be negatively charged and basic residues will be neutral), if above it will be protonated (acidic residues will be neutral and basic residues will be positively charged). Helpfully enough. 
+When preparing a protein, we have to compare each one of the predicted  pKa values with the chosen pH: if the pKa is below the chosen pH the residue should be deprotonated (that is acidic residues will be negatively charged and basic residues will be neutral), if above it will be protonated (acidic residues will be neutral and basic residues will be positively charged). 
 
 > ## TIP:
 >
@@ -179,8 +179,6 @@ A
 
 The following residues had alternate locations:
 VAL_73
-ARG_217
-ASN_221
 -----------Non-standard-resnames
 
 

@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-06-03 16:20:02 +0100">
+    <meta http-equiv="last-modified" content="2020-06-04 13:07:49 +0100">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -146,11 +146,19 @@
             
             <li><a href="./about/index.html">About</a></li>
             
+            <li><a href="./customization/index.html">Customizing Your Workshop's Website</a></li>
+            
+            <li><a href="./design/">Background and Design</a></li>
+            
             <li><a href="./discuss/index.html">Discussion</a></li>
+            
+            <li><a href="./faq/index.html">FAQ</a></li>
             
             <li><a href="./figures/index.html">Figures</a></li>
             
             <li><a href="./guide/index.html">Instructor Notes</a></li>
+            
+            <li><a href="./helpers/index.html">Information for Helpers</a></li>
             
             <li><a href="./inputs/index.html">Input files</a></li>
             
@@ -349,16 +357,13 @@
       <td class="col-md-9">
         <ul>
         
-        <li><p>After adding water molecules and combining coordinates of different system elements we have to relax the system to fix any bad contacts (LEap had warned us already of some bad contacts in the structure).</p>
+        <li><p>After adding water molecules and combining coordinates of different system elements we have to minimise the system to fix any bad contacts (LEap had warned us already of some bad contacts in the structure).</p>
 </li>
         
-        <li><p>Removing bad contacts at this point will prevent our system from blowing up later on.</p>
+        <li><p>Removing bad contacts at this point will prevent our system from failing catastrophically later down the line.</p>
 </li>
         
-        <li><p>Combining different minimisation methods is a good practice to avoid getting stuck into a local minima.</p>
-</li>
-        
-        <li><p>The <code class="language-plaintext highlighter-rouge">GMAX</code> value let us know which position we are sampling in the potential energy surface.</p>
+        <li><p>Combining different minimisation methods is a good practice and can help to avoid getting stuck into a local minima.</p>
 </li>
         
         </ul>
@@ -381,9 +386,6 @@
 </li>
         
         <li><p>Density equilibration fixes the water density and corrects the size simulation box. It prevents air bubbles in our system that might cause simulation artefacts.</p>
-</li>
-        
-        <li><p>You should <strong>ALWAYS</strong> equilibrate your system using <code class="language-plaintext highlighter-rouge">sander</code>.”</p>
 </li>
         
         </ul>

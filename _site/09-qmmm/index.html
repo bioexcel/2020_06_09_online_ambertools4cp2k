@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-06-03 16:20:02 +0100">
+    <meta http-equiv="last-modified" content="2020-06-04 13:07:49 +0100">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -146,11 +146,19 @@
             
             <li><a href="../about/index.html">About</a></li>
             
+            <li><a href="../customization/index.html">Customizing Your Workshop's Website</a></li>
+            
+            <li><a href="../design/">Background and Design</a></li>
+            
             <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../faq/index.html">FAQ</a></li>
             
             <li><a href="../figures/index.html">Figures</a></li>
             
             <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+            <li><a href="../helpers/index.html">Information for Helpers</a></li>
             
             <li><a href="../inputs/index.html">Input files</a></li>
             
@@ -236,6 +244,9 @@
       <strong>Questions</strong>
       <ul>
 	
+	<li><p>What is CP2K?</p>
+</li>
+	
 	<li><p>What is the first step of a QM/MM simulation?</p>
 </li>
 	
@@ -265,9 +276,29 @@
 
 </blockquote>
 
-<p>After we have equilibrated the system using molecular mechanics, we need to equilibrate the system running the chosen QM/MM approach. It is important to run a monitorisation run before any production run to make sure our system behaves as expected.</p>
+<h2 id="moving-from-mm-to-qmmm">Moving from MM to QM/MM…</h2>
 
-<p>We will use a semi-empirical <a href="https://en.wikipedia.org/wiki/PM3_(chemistry)">PM3</a> to define the QM region and the amended Amber forcefield to define the MM subsystem. We will run 500fs (1000steps * 0.5 fs) of simulation on an ARCHER node.</p>
+<p>We want to address a few points before we start running a QM/MM simulation.</p>
+
+<h4 id="what-is-cp2k">What is CP2K?</h4>
+
+<p><a href="https://www.cp2k.org">CP2K</a> is a quantum chemistry and solid state physics software package that can perform atomistic simulations of solid state, liquid, molecular, periodic, material, crystal, and biological systems. CP2K provides a general framework for different modeling methods such as DFT using the mixed Gaussian and plane waves approaches GPW and GAPW. Supported theory levels include DFTB, LDA, GGA, MP2, RPA, semi-empirical methods (AM1, PM3, PM6, RM1, MNDO, …), and classical force fields (AMBER, CHARMM, …). CP2K can do simulations of molecular dynamics, metadynamics, Monte Carlo, Ehrenfest dynamics, vibrational analysis, core level spectroscopy, energy minimization, and transition state optimization using NEB or dimer method.</p>
+
+<p>You can find more information on its usage <a href="https://manual.cp2k.org/">here</a>.</p>
+
+<h4 id="which-theory-level-are-we-going-to-use">Which theory level are we going to use?</h4>
+
+<p>We will use of <a href="https://en.wikipedia.org/wiki/PM3_(chemistry)">PM3</a>, a semiempirical method, to define the QM region and the amended Amber forcefield to define the MM subsystem. We will run 500fs (1000steps * 0.5 fs) of simulation on an ARCHER node.</p>
+
+<h4 id="how-do-we-define-the-qm-region">How do we define the QM region?</h4>
+
+<p>In this example, we are going to define the ligand GWS as the QM region. This implies 34 QM atoms embedded within a MM envinronment. Despite this is a simple and convenient example, it is not uncommon. It also has the advantage that we do not need to split any covalent bonds between the QM subsystem and the MM subsystem. This topic will be covered in future sessions.</p>
+
+<hr />
+
+<h2 id="running-a-qmmm-monitorisation-run">Running a QM/MM monitorisation run</h2>
+
+<p>After we have equilibrated the system using molecular mechanics, we need to equilibrate the system running the chosen QM/MM approach. It is important to run a monitorisation run before any production run to make sure our system behaves as expected.</p>
 
 <p>This step might take some time, so we will also submit the calculation to the ARCHER short queue:</p>
 
@@ -631,6 +662,18 @@ aprun -n 24 cp2k.popt -i cp2k_qmmm_equil.inp &gt; cp2k_qmmm_equil.out
  AVE. CELL LNTHS[bohr]        =    0.1436205E+03   0.1442779E+03   0.1442979E+03
  *******************************************************************************
 </code></pre></div></div>
+
+<blockquote class="challenge">
+  <h2 id="further-information">Further information:</h2>
+
+  <p>CP2K uses different unit from AmberTools and it can be confusing sometimes. Such as:</p>
+  <ul>
+    <li>Bohrs for Length.</li>
+  </ul>
+
+  <p>Here is a list of <a href="https://manual.cp2k.org/trunk/units.html">available unit in CP2K</a>.</p>
+
+</blockquote>
 
 
 <blockquote class="keypoints">

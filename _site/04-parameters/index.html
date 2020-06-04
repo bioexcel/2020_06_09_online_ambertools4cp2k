@@ -19,7 +19,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta http-equiv="last-modified" content="2020-06-03 16:20:02 +0100">
+    <meta http-equiv="last-modified" content="2020-06-04 13:07:49 +0100">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- meta "search-domain" used for google site search function google_search() -->
     <meta name="search-domain" value="">
@@ -146,11 +146,19 @@
             
             <li><a href="../about/index.html">About</a></li>
             
+            <li><a href="../customization/index.html">Customizing Your Workshop's Website</a></li>
+            
+            <li><a href="../design/">Background and Design</a></li>
+            
             <li><a href="../discuss/index.html">Discussion</a></li>
+            
+            <li><a href="../faq/index.html">FAQ</a></li>
             
             <li><a href="../figures/index.html">Figures</a></li>
             
             <li><a href="../guide/index.html">Instructor Notes</a></li>
+            
+            <li><a href="../helpers/index.html">Information for Helpers</a></li>
             
             <li><a href="../inputs/index.html">Input files</a></li>
             
@@ -259,13 +267,13 @@
 
 </blockquote>
 
-<p>In this tutorial, we will make use of the <code class="language-plaintext highlighter-rouge">antechamber</code> and <code class="language-plaintext highlighter-rouge">parmchk2</code> tools from AmberTools package to generate AMBER force field parameters. We will use the “<strong>general AMBER force field 2 <a href="http://ambermd.org/antechamber/gaff.html">(GAFF2)</a></strong>”. This force field was designed to provide atom types and atom parameters needed to parameterise most pharmaceutical molecules, and is compatible with the traditional AMBER force fields. To assign partial charges, we are going to use <strong><a href="https://pubmed.ncbi.nlm.nih.gov/12395429/">AM1-BCC2 charge method</a></strong>. It is an inexpensive and fast method for calculating partial charges and any limitations of this method would be fixed by the QM treatment of the ligand in the QM/MM simulation.</p>
+<p>In this tutorial, we will make use of the <code class="language-plaintext highlighter-rouge">antechamber</code> and <code class="language-plaintext highlighter-rouge">parmchk2</code> tools from AmberTools package to generate AMBER force field parameters. We will use the “<strong>general AMBER force field 2 <a href="http://ambermd.org/antechamber/gaff.html">(GAFF2)</a></strong>” parameters. This force field was designed to provide atom types and atom parameters needed to parameterise most pharmaceutical molecules, and is compatible with the traditional AMBER force fields for proteins. To assign partial charges, we are going to use <strong><a href="https://pubmed.ncbi.nlm.nih.gov/12395429/">AM1-BCC2 charge method</a></strong>. It is an inexpensive and fast method for calculating partial charges and be we don’t need to worry too much about its limitations as partial charges won’t be used during production runs due to the QM treatment of the ligand in the QM/MM simulation.</p>
 
 <hr />
 
 <h2 id="generating-point-charges-and-assigning-atomtypes-with-antechamber">Generating point charges and assigning atomtypes with <code class="language-plaintext highlighter-rouge">antechamber</code></h2>
 
-<p><code class="language-plaintext highlighter-rouge">antechamber</code> allows the rapid generation of topology files for use with the AMBER simulation programs. It runs a series of other AmberTools programs (<code class="language-plaintext highlighter-rouge">sqm</code>, <code class="language-plaintext highlighter-rouge">divcon</code>, <code class="language-plaintext highlighter-rouge">atomtype</code>, <code class="language-plaintext highlighter-rouge">am1bcc</code>, <code class="language-plaintext highlighter-rouge">bondtype</code>, <code class="language-plaintext highlighter-rouge">espgen</code>, <code class="language-plaintext highlighter-rouge">respgen</code> and <code class="language-plaintext highlighter-rouge">prepgen</code>) to be able to:</p>
+<p><code class="language-plaintext highlighter-rouge">antechamber</code> allows the rapid generation of topology files for use with the AMBER simulation programs. It is a higher-level wrapper around other AmberTools programs (<code class="language-plaintext highlighter-rouge">sqm</code>, <code class="language-plaintext highlighter-rouge">divcon</code>, <code class="language-plaintext highlighter-rouge">atomtype</code>, <code class="language-plaintext highlighter-rouge">am1bcc</code>, <code class="language-plaintext highlighter-rouge">bondtype</code>, <code class="language-plaintext highlighter-rouge">espgen</code>, <code class="language-plaintext highlighter-rouge">respgen</code> and <code class="language-plaintext highlighter-rouge">prepgen</code>) and is able to:</p>
 
 <ul>
   <li>Automatically identify bond and atom types</li>
@@ -274,7 +282,7 @@
   <li>Find missing force field parameters and supply reasonable suggestions</li>
 </ul>
 
-<p>We will use <code class="language-plaintext highlighter-rouge">antechamber</code> to assign atom types to the GWS ligand and calculate a set of point charges. We will have to specify GAFF2 force field (<code class="language-plaintext highlighter-rouge">-at gaff2</code>, more information on the parameters here: <code class="language-plaintext highlighter-rouge">$AMBERHOME/dat/leap/parm/gaff.dat</code>), the <a href="https://pubmed.ncbi.nlm.nih.gov/12395429/">AM1-BCC2</a> charge method (<code class="language-plaintext highlighter-rouge">-c bcc</code>), the net charge of the molecule (<code class="language-plaintext highlighter-rouge">-nc 0</code>) and the name of the new residue generated (We are going to keep GWS: <code class="language-plaintext highlighter-rouge">-rn GWS</code>). We are going to output a mol2-type file (<code class="language-plaintext highlighter-rouge">-fo mol2</code>) containing the atomtypes and the point charges.</p>
+<p>We will use <code class="language-plaintext highlighter-rouge">antechamber</code> to assign atom types to the GWS ligand and calculate a set of point charges. We will have to specify GAFF2 force field (<code class="language-plaintext highlighter-rouge">-at gaff2</code>, more information on the parameters here: <code class="language-plaintext highlighter-rouge">$AMBERHOME/dat/leap/parm/gaff2.dat</code>), the <a href="https://pubmed.ncbi.nlm.nih.gov/12395429/">AM1-BCC2</a> charge method (<code class="language-plaintext highlighter-rouge">-c bcc</code>), the net charge of the molecule (<code class="language-plaintext highlighter-rouge">-nc 0</code>) and the name of the new residue generated (We are going to keep GWS: <code class="language-plaintext highlighter-rouge">-rn GWS</code>). We are going to output a mol2-type file (<code class="language-plaintext highlighter-rouge">-fo mol2</code>) containing the atomtypes and the point charges.</p>
 
 <div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code>antechamber <span class="nt">-i</span> GWS.H.pdb <span class="nt">-fi</span> pdb <span class="nt">-o</span> GWS.mol2 <span class="nt">-fo</span> mol2 <span class="nt">-c</span> bcc <span class="nt">-nc</span> 0 <span class="nt">-rn</span> GWS <span class="nt">-at</span> gaff2
 </code></pre></div></div>
@@ -303,9 +311,9 @@ Info: Total number of electrons: 118; net charge: 0
 Running: /home/d118/d118/shared/amber20/bin/sqm -O -i sqm.in -o sqm.out
 </code></pre></div></div>
 
-<p>This step generates a lot of intermediate files (in capital letters). You can safely delete them as these are used in antechamber and we no longer require them.The sqm.xxx files are input and output from the sqm quantum mechanics code used by Antechamber to calculate the atomic point charges. We are not interested in the data here except to check that the sqm calculation completed successfully.</p>
+<p>This step generates a lot of intermediate files (in capital letters). You can safely delete them as these are used in antechamber and we no longer require them. The <code class="language-plaintext highlighter-rouge">sqm.xxx</code> files are input and output from the <code class="language-plaintext highlighter-rouge">sqm</code> quantum mechanics code used by <code class="language-plaintext highlighter-rouge">antechamber</code> to calculate the atomic point charges. We are not interested in the data here except to check that the sqm calculation completed successfully.</p>
 
-<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tail </span>sqm.out
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nb">tail  </span>sqm.out
 </code></pre></div></div>
 
 <div class="language-plaintext output highlighter-rouge"><div class="highlight"><pre class="highlight"><code>           --------- Calculation Completed ----------
@@ -337,7 +345,7 @@ bcc
 
 <h2 id="looking-for-missing-force-field-parameters-with-parmchk2">Looking for missing force field parameters with <code class="language-plaintext highlighter-rouge">parmchk2</code></h2>
 
-<p>While the most likely combinations of bond, angle and dihedral parameters are defined in the parameter file it is possible that our molecule might contain combinations of atom types for bonds, angles or dihedrals that have not been parameterised. If this is the case, we will have to specify any missing parameters before we can create our prmtop and inpcrd files in Leap.</p>
+<p>While the most likely combinations of bond, angle and dihedral parameters are defined in the parameter file it is possible that our molecule might contain combinations of atom types for bonds, angles or dihedrals that have not been parameterised. If this is the case, we will have to specify any missing parameters before we can create our prmtop and inpcrd files in LEap.</p>
 
 <p>We will use <code class="language-plaintext highlighter-rouge">parmchk2</code> to test if all the parameters we require are available.</p>
 

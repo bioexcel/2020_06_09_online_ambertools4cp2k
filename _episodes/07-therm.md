@@ -11,10 +11,9 @@ keypoints:
 - "Thermalisation takes our system up to the target temperature."
 - "Using a temperature ramp is a good way to slowly increase the system temperature and avoid your system from blowing up due to some bad contacts in your coordinates. You can set up a temperature ramp using the NMR restraint options of `sander`."
 - "Density equilibration fixes the water density and corrects the size simulation box. It prevents air bubbles in our system that might cause simulation artefacts."
-- You should **ALWAYS** equilibrate your system using `sander`."
 ---
 
-After the minimisation step, we will heat the system up to the target temperature 298K (25°C, default room temperature for experimental work) while keeping the volume constant. Afterwards, we will allow the volume to fluctuate and equilibrate the density of the system at a contant pressure of 1 atm (default value for experimental work) while still keeping the temperature at 298K.  
+After the minimisation step, we will heat the system up to the target temperature 298K (25°C, standard value for room temperature experiments) while keeping the volume constant. Afterwards, we will allow the volume to fluctuate and equilibrate the density of the system at a contant pressure of 1 atm (standard value) while still keeping the temperature at 298K.  
 
 ## Thermalisation
 
@@ -25,7 +24,7 @@ Heating ramp from 0K to 300K
  &cntrl
   imin=0,                   ! Run molecular dynamics.
   ntx=1,                    ! Initial file contains coordinates, but no velocities.
-  irest=0,                  ! Do not restart the simulation
+  irest=0,                  ! Do not restart the simulation, (only read coordinates from the coordinates file)
   nstlim=15000,             ! Number of MD-steps to be performed.
   dt=0.002,                 ! Time step (ps)
   ntf=2, ntc=2,             ! Constrain lengths of bonds having hydrogen atoms (SHAKE)
@@ -45,7 +44,7 @@ Heating ramp from 0K to 300K
 {: .source}
 
 `sander` produces several output files:
-- `heat_classical.out`: Output with system values stored during the run. 
+- `heat_classical.out`: Log file with system values stored during the run. 
 - `system.heat.rst7`: coordinates and velocities to restart the simulation.
 - `system.heat.nc`: trajectory in netcdf format of the simulation.
 
@@ -63,7 +62,7 @@ If we open the `heat_classical.out` file, we will find that the last step of MD 
 
 ## Pressure equilibration
 
-Once the thermalisation step has finished, `sander` will use the input file `sander_equil.in` to equilibrate the density of the system. Usually both equilibrations steps should be longer (simulation time) but for the sake of time, we will use the same simulation length (30ps):
+Once the thermalisation step has finished, `sander` will use the input file `sander_equil.in` to equilibrate the density of the system. It is advised to heat and equilibrate over longer periods of simulations than the ones used in this workshop. However for the sake of time, we will use the same simulation length (30ps):
 
 ~~~
 Density equilibration
@@ -71,7 +70,7 @@ Density equilibration
   imin= 0,                       ! Run molecular dynamics.
   nstlim=15000,                  ! Number of MD-steps to be performed.
   dt=0.002,                      ! Time step (ps)
-  irest=1,                       ! Restart the simulation
+  irest=1,                       ! Restart the simulation and read coordinates and velocities from the restart file provided in -c
   ntx=5,                         ! Initial file contains coordinates and velocities.
   ntpr=500, ntwx=500, ntwr=500,  ! Output options
   cut=8.0,                       ! non-bond cut off
@@ -86,7 +85,7 @@ Density equilibration
 {: .source}
 
 Again, `sander` produces several output files:
-- `equil_classical.out`: Output with thermodynamic data of the system stored during the run.
+- `equil_classical.out`: Log file with thermodynamic data of the system stored during the run.
 - `system.equil.rst7`: coordinates and velocities to restart the simulation.
 - `system.equil.nc`: trajectory in netcdf format of the simulation.
 
@@ -107,7 +106,7 @@ The last step of MD in the `equil_classical.out` should be similar to this:
 
 ## Analysis of the MM equilibration simulation
 
-If we have a closer look at the final steps highlighted before. In the .out files, we have printed the system values every 500 steps, these system values include important values such as:
+We will now have a closer look at the final steps highlighted before. In the log files, we have monitored the values of several quantities. Especially relevant are:
 - `NSTEP`: The time step that the MD simulation is at
 - `TIME`: The total time of the simulation (including restarts)
 - `TEMP`: System temperature
@@ -140,7 +139,7 @@ Outputing summary.VOLUME
 ~~~
 {: .output}
 
-Here we will show you the expected output of an equilibration run. The energy of the system will depend on the temperature of the system. Here you can compare side by side the time evolution of the temperature, the total energy, the kinetic energy and the potential energy.  
+Here we will show you the expected output of an equilibration run. First, we will show the temperature and the energies (kinetic, potential and total) of the system. 
 
 | Temperature | Energy |
 | ------------- | ------------- |
@@ -155,6 +154,6 @@ The pressure and the density are only set when we perform the NPT run, therefore
 | ![Pressure over time]({{ page.root }}/fig/pressure.png)  | ![Density over time]({{ page.root }}/fig/density.png)  |
 
 
-You can see that the system reaches a plateau on each one of this values. We want to highlight that the MM equilibration in this tutorial is too short (only 60ps) and we suggest you to run a longer equilibration steps in your simulations. 
+You can see that the system starts to reach a plateau on each one of these values. We want to reiterate that the MM equilibration in this tutorial is way too short (only 60ps) and we suggest you to run a longer equilibration steps in your simulations. 
 
-It is not within the scope of this tutorial to analyse these equilibration runs, therefore we leave that to you. However we provide a jupyter notebook with the code to produce these graphs for your systems.
+It is not within the scope of this tutorial to fully analyse these equilibration runs, therefore we leave that to you. However, we provide a jupyter notebook with the code to produce these graphs for your systems.

@@ -45,9 +45,10 @@ ssh -XY user@login.archer.ac.uk
 First, to set up the proper environment you should run the following commands on ARCHER. These set of commands will give you access to the installed software:
 
 ~~~
+module swap PrgEnv-cray PrgEnv-gnu
 module load amber-tools/20 
 module load propka
-module load openbabel
+module load openbabel/2.4.1
 ~~~
 {: .language-bash}
 
