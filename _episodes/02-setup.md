@@ -82,7 +82,7 @@ git clone https://git.ecdf.ed.ac.uk/sllabres/files_ambertools4cp2k.git
 >
 {: .prereq}
 
-Once you have downloaded the files you can go into the `ambertools4cp2k folder and proceed to the next section:
+Once you have downloaded the files you can go into the `ambertools4cp2k` folder and proceed to the next section:
 
 ~~~
 cd files_ambertools4cp2k

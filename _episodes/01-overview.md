@@ -8,7 +8,7 @@ objectives:
 - "Overview of AmberTools package."
 - "List of AmberTools tools to prepare your biological system."
 keypoints:
-- "AmberTools package has multiple tools to prepare, simulate and anlayse biological systems."
+- "AmberTools package has multiple tools to prepare, simulate and analyse biological systems."
 - " You should familiarise yourself with `tleap`, `pamred`, `nab`, `cpptraj`, `antechamber`, `parmch2` and `sander` as they will ususally be helpful to set up a biological system."
 - "`tleap` is used to generate topologies and coordinates for biological molecules."
 - "`cpptraj` is used to postprocess and analyse AMBER trajectories."
