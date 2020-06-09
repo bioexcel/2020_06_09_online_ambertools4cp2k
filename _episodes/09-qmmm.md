@@ -55,7 +55,7 @@ qsub send_qmmm_equil.pbs
 #PBS -l walltime=00:20:00
 
 # Make sure you change this to your budget code
-#PBS -A XXX
+#PBS -A y14-amber2020
 
 module load cp2k/7.1
 

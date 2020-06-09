@@ -35,7 +35,7 @@ To run `sander`, one needs to specify at least the initial coordinates (`-c syst
 #PBS -l walltime=00:20:00
 
 # Make sure you change this to your budget code
-#PBS -A d118
+#PBS -A y14-amber2020
 
 module swap PrgEnv-cray PrgEnv-gnu
 module load amber-tools/20

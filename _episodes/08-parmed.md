@@ -32,15 +32,15 @@ parmed system.parm7
 We can check if there are missing parameter by printing an atom index (4685 corresponds to the hydrogen atom of the first water molecule) using the `printDetails` command. Here we can see that the LJ Radius and LJ Depth values are set to 0.
 
 ~~~
-printDetails @4685
+printDetails @4686
 ~~~
 {: .source}
 
 ~~~
-The mask @4685 matches 1 atoms:
+The mask @4686 matches 1 atoms:
 
    ATOM    RES  RESNAME  NAME  TYPE   At.#   LJ Radius    LJ Depth      Mass    Charge GB Radius GB Screen
-   4685    310      WAT    H1    HW      1      0.0000      0.0000    1.0080    0.4170    0.8000    0.8500
+   4686    776      WAT    H1    HW      1      0.0000      0.0000    1.0080    0.4170    0.8000    0.8500
 ~~~
 {: .output}
 
