@@ -70,7 +70,7 @@ check system
 
 If the unit is OK, we can continue! Now we need to solvate it and add counterions to neutralise the system. 
 
-To solvate the system, we can use 2 different commands: `solvateOct` and `solvateBox`. These commands differ in the shape of the resulting simulation box: the first command creates a truncated octaedron solvation box and the second a cubic solvation box. Despite truncated octaedric boxes being smaller and compatible with globular proteins, we are going to use `solvateBox` because CP2K only allows orthorombic boxes. 
+To solvate the system, we can use 2 different commands: `solvateOct` and `solvateBox`. These commands differ in the shape of the resulting simulation box: the first command creates a truncated octahedron solvation box and the second a cubic solvation box. Despite truncated octahedric boxes being smaller and compatible with globular proteins, we are going to use `solvateBox` because CP2K only allows orthorombic boxes. 
 
 Last but not least, we need to neutralise the system by adding counterions. To this end, we will add Na+ and Cl- ions until our box reaches the correct charge. This is done with the `addions2` command.
 
